@@ -69,4 +69,45 @@ Trong đó ký hiệu ∇ f( x_t) – hình tam giác ngược đọc là nabla.
 
 
 # 2)	Tìm hiểu về Continual Learning và Test Production khi xây dựng một giải pháp học máy để giải quyết một bài toán nào đó.
+# Continual Learning
+## Định nghĩa
+Continual learning (hoặc lifelong learning) là khả năng của một mô hình học máy với mục tiêu có thể liên tục học từ dữ liệu mới mà nó gặp phải mà không quên đi kiến thức đã học trước đó. Và trong ngữ cảnh của học sâu, nơi mô hình thường được đào tạo trước và sau đó được triển khai để dự đoán hoặc phân loại dữ liệu mới, việc này có thể đặt ra thách thức khi mô hình phải đối mặt với dữ liệu không giống với dữ liệu đã được sử dụng để đào tạo. 
+## Continual Learning có thật sự cần thiết khi xây dựng mô hình học máy?
+Một mô hình có khả năng continual learning được xem là tốt vì một số lý do chính liên quan đến môi trường thực tế và các ứng dụng sau:
+
+•	Dữ liệu Thay Đổi Liên Tục: Trong thực tế, dữ liệu có thể thay đổi liên tục do sự biến động của môi trường, nguồn dữ liệu, và điều kiện thực tế. Continual learning giúp mô hình nhanh chóng thích ứng với dữ liệu mới mà không cần phải đào tạo lại từ đầu.
+
+•	Tiết Kiệm Thời Gian và Tài Nguyên: Đào tạo lại một mô hình trên toàn bộ dữ liệu mỗi khi có sự thay đổi có thể tốn kém về thời gian và tài nguyên tính toán. Continual learning giúp giảm bớt nhu cầu đào tạo lại đầy đủ mô hình, giữ lại kiến thức đã học và chỉ cập nhật mô hình cho dữ liệu mới.
+
+•	Giảm Hiện Tượng Quên (Catastrophic Forgetting): Continual learning giúp giảm thiểu hiện tượng quên, nơi mô hình không quên kiến thức đã học trước đó khi được đào tạo với dữ liệu mới.
+
+•	Ứng Dụng trong Hệ Thống Thời Gian Thực: Trong các hệ thống thời gian thực như xe tự lái hoặc hệ thống theo dõi y tế, mô hình cần phải liên tục học và thích ứng với môi trường mới mà không làm ảnh hưởng đến khả năng dự đoán.
+## Cách thức hoạt động
+Continual learning thường được thực hiện thông qua một loạt các giai đoạn để đảm bảo rằng mô hình có thể học liên tục mà không gặp vấn đề quên kiến thức hoặc giảm độ chính xác trên nhiệm vụ trước đó. Dưới đây là bốn giai đoạn chính của Continual Learning:
+
+1.	Huấn luyện Stateless Retraining bằng phương pháp thủ công: Mô hình sẽ bắt đầu được huấn luyện lại khi hai điều kiện sau được đáp ứng: đầu tiên là khi hiệu suất của mô hình đã giảm đến mức nó đang tạo ra nhiều thiệt hại hơn là lợi ích và đội ngũ của ta có đủ thời gian để cập nhật nó.
+   
+2.	Stateless Retraining tự động với lịch trình cố định: giai đoạn này xảy ra khi các mô hình chính của một lĩnh vực đã được phát triển, do đó, ưu tiên của ta không còn là tạo ra các mô hình mới, mà là duy trì và cải tiến những mô hình hiện tại. Quá trình này giúp đảm bảo rằng mô hình luôn được cập nhật và không trì trệ, giảm thiểu nguy cơ giảm chất lượng do quá trình học.
+	
+3.	Stateful Training tự động với lịch trình cố định: Ở giai đoạn này, mô hình được huấn luyện tự động theo lịch trình cố định, và thông tin trạng thái được duy trì giữa các chu kỳ huấn luyện. Điều này giúp đảm bảo rằng mô hình không chỉ được cập nhật về dữ liệu mới mà còn duy trì kiến thức đã học từ các chu kỳ trước đó. Quá trình này có thể thực hiện thông qua việc sử dụng các kỹ thuật như Memory replay và các phương pháp giữ trạng thái để tối ưu hóa hiệu suất mô hình.
+   
+Ví dụ: Ta có hai mô hình khác nhau V1 và V2 cho cùng một vấn đề. Thông tin trạng thái được thể hiện như sau:
+
+	•	V1.2 và V2.3 nghĩa là kiến trúc mô hình V1 đang ở trong vòng lặp thứ 2 của quá trình Stateless retraining trong khi mô hình V2 đang trong vòng lặp thứ 3.
+ 
+	•	V1.2.12 và V2.3.43 nghĩa là đã có 12 lần stateful training trên V1.2 và 43 lần trên V2.3.
+ 
+	Tại bất kỳ thời điểm cụ thể nào, sẽ có nhiều mô hình đang chạy trong production cùng một lúc thông qua các sắp xếp sẽ được mô tả trong Testting models in Production.
+
+4.	Continual Learning: Ở giai đoạn này, lịch trình cố định của các giai đoạn trước sẽ được thay thế bằng một cơ chế kích hoạt tái huấn luyện nào đó. Các kích hoạt có thể là:
+   
+	•	Thời gian: hệ thống hoặc quy trình tự động hóa quyết định về việc tái huấn luyện mô hình dựa trên khoảng thời gian cụ thể. Thay vì sử dụng lịch trình cố định, hệ thống này sẽ tự động kích hoạt quá trình tái huấn luyện sau một khoảng thời gian nhất định được xác định trước.
+
+	•	Hiệu suất: hệ thống tự động hóa quyết định về việc tái huấn luyện mô hình dựa trên hiệu suất của nó. Ví dụ, nếu hiệu suất của mô hình giảm dưới một ngưỡng nhất định (ví dụ: dưới x%), cơ chế này sẽ tự động kích hoạt quá trình tái huấn luyện để cải thiện hiệu suất và duy trì chất lượng của mô hình.
+
+	•	Lượng dữ liệu: hệ thống tự động hóa quyết định về việc tái huấn luyện mô hình dựa trên sự thay đổi trong lượng dữ liệu. Ví dụ, nếu có sự tăng đột ngột trong lượng dữ liệu mới, cơ chế này có thể tự động kích hoạt quá trình tái huấn luyện để đảm bảo mô hình được cập nhật với dữ liệu mới và có khả năng học từ các xu hướng mới.
+
+	•	Sự chênh lệch: hệ thống tự động hóa quyết định về việc tái huấn luyện mô hình dựa trên sự chệch trong dữ liệu đầu vào. Khi có sự thay đổi đáng kể trong phân phối hoặc đặc điểm của dữ liệu, cơ chế này có thể tự động kích hoạt quá trình tái huấn luyện để mô hình có thể đối mặt với những thay đổi này và duy trì hiệu suất cao.
+
+
 
