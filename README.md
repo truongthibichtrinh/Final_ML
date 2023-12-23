@@ -85,11 +85,14 @@ Một mô hình có khả năng continual learning được xem là tốt vì m�
 ## Cách thức hoạt động
 Continual learning thường được thực hiện thông qua một loạt các giai đoạn để đảm bảo rằng mô hình có thể học liên tục mà không gặp vấn đề quên kiến thức hoặc giảm độ chính xác trên nhiệm vụ trước đó. Dưới đây là bốn giai đoạn chính của Continual Learning:
 
-1.	Huấn luyện Stateless Retraining bằng phương pháp thủ công: Mô hình sẽ bắt đầu được huấn luyện lại khi hai điều kiện sau được đáp ứng: đầu tiên là khi hiệu suất của mô hình đã giảm đến mức nó đang tạo ra nhiều thiệt hại hơn là lợi ích và đội ngũ của ta có đủ thời gian để cập nhật nó.
+### 1.	Huấn luyện Stateless Retraining bằng phương pháp thủ công: 
+Mô hình sẽ bắt đầu được huấn luyện lại khi hai điều kiện sau được đáp ứng: đầu tiên là khi hiệu suất của mô hình đã giảm đến mức nó đang tạo ra nhiều thiệt hại hơn là lợi ích và đội ngũ của ta có đủ thời gian để cập nhật nó.
    
-2.	Stateless Retraining tự động với lịch trình cố định: giai đoạn này xảy ra khi các mô hình chính của một lĩnh vực đã được phát triển, do đó, ưu tiên của ta không còn là tạo ra các mô hình mới, mà là duy trì và cải tiến những mô hình hiện tại. Quá trình này giúp đảm bảo rằng mô hình luôn được cập nhật và không trì trệ, giảm thiểu nguy cơ giảm chất lượng do quá trình học.
+### 2.	Stateless Retraining tự động với lịch trình cố định: 
+Giai đoạn này xảy ra khi các mô hình chính của một lĩnh vực đã được phát triển, do đó, ưu tiên của ta không còn là tạo ra các mô hình mới, mà là duy trì và cải tiến những mô hình hiện tại. Quá trình này giúp đảm bảo rằng mô hình luôn được cập nhật và không trì trệ, giảm thiểu nguy cơ giảm chất lượng do quá trình học.
 	
-3.	Stateful Training tự động với lịch trình cố định: Ở giai đoạn này, mô hình được huấn luyện tự động theo lịch trình cố định, và thông tin trạng thái được duy trì giữa các chu kỳ huấn luyện. Điều này giúp đảm bảo rằng mô hình không chỉ được cập nhật về dữ liệu mới mà còn duy trì kiến thức đã học từ các chu kỳ trước đó. Quá trình này có thể thực hiện thông qua việc sử dụng các kỹ thuật như Memory replay và các phương pháp giữ trạng thái để tối ưu hóa hiệu suất mô hình.
+### 3.	Stateful Training tự động với lịch trình cố định: 
+Ở giai đoạn này, mô hình được huấn luyện tự động theo lịch trình cố định, và thông tin trạng thái được duy trì giữa các chu kỳ huấn luyện. Điều này giúp đảm bảo rằng mô hình không chỉ được cập nhật về dữ liệu mới mà còn duy trì kiến thức đã học từ các chu kỳ trước đó. Quá trình này có thể thực hiện thông qua việc sử dụng các kỹ thuật như Memory replay và các phương pháp giữ trạng thái để tối ưu hóa hiệu suất mô hình.
    
 Ví dụ: Ta có hai mô hình khác nhau V1 và V2 cho cùng một vấn đề. Thông tin trạng thái được thể hiện như sau:
 
@@ -99,7 +102,8 @@ Ví dụ: Ta có hai mô hình khác nhau V1 và V2 cho cùng một vấn đề.
  
 	Tại bất kỳ thời điểm cụ thể nào, sẽ có nhiều mô hình đang chạy trong production cùng một lúc thông qua các sắp xếp sẽ được mô tả trong Testting models in Production.
 
-4.	Continual Learning: Ở giai đoạn này, lịch trình cố định của các giai đoạn trước sẽ được thay thế bằng một cơ chế kích hoạt tái huấn luyện nào đó. Các kích hoạt có thể là:
+### 4.	Continual Learning: 
+Ở giai đoạn này, lịch trình cố định của các giai đoạn trước sẽ được thay thế bằng một cơ chế kích hoạt tái huấn luyện nào đó. Các kích hoạt có thể là:
    
 	•	Thời gian: hệ thống hoặc quy trình tự động hóa quyết định về việc tái huấn luyện mô hình dựa trên khoảng thời gian cụ thể. Thay vì sử dụng lịch trình cố định, hệ thống này sẽ tự động kích hoạt quá trình tái huấn luyện sau một khoảng thời gian nhất định được xác định trước.
 
@@ -109,5 +113,37 @@ Ví dụ: Ta có hai mô hình khác nhau V1 và V2 cho cùng một vấn đề.
 
 	•	Sự chênh lệch: hệ thống tự động hóa quyết định về việc tái huấn luyện mô hình dựa trên sự chệch trong dữ liệu đầu vào. Khi có sự thay đổi đáng kể trong phân phối hoặc đặc điểm của dữ liệu, cơ chế này có thể tự động kích hoạt quá trình tái huấn luyện để mô hình có thể đối mặt với những thay đổi này và duy trì hiệu suất cao.
 
+## 2.2 Test Production
+Để kiểm thử đầy đủ mô hình trước khi đưa ra sử dụng rộng rãi, ta cần làm cả hai việc đó là đánh giá offline trước triển khai và kiểm thử trong môi trường sản xuất.
+### 2.2.1 Đánh giá offline trước triển khai
+Hai phương pháp được sử dụng phổ biến là Sử dụng một tập kiểm thử (test splits) để so sánh với một điểm cơ sở và thực hiện các kiểm thử lại (backtests).
 
+•	Test splits: Các tập kiểm thử thường là tĩnh (static) để ta có một điểm chuẩn tin cậy hỗ trợ so sánh nhiều mô hình. Điều này cũng có nghĩa là hiệu suất tốt trên một tập kiểm thử cũ không đảm bảo hiệu suất tốt dưới điều kiện phân phối dữ liệu hiện tại trong môi trường sản xuất.
+
+•	Backtesting: ta sẽ sử dụng dữ liệu được gán nhãn mới nhất mà mô hình chưa thấy trong quá trình huấn luyện để kiểm thử hiệu suất. Tuy nhiên ta vẫn cần quan sát các yếu tố như độ trễ, hành vi người dùng với mô hình và tính đúng đắn của tích hợp hệ thống để đảm bảo mô hình của ta an toàn khi triển khai rộng rãi.
+
+### 2.2.2 Các chiến lược kiểm thử
+#### 2.2.2.1 A/B Testing
+
+•	Lý thuyết: Triển khai mô hình đối thủ (challenger) cùng với mô hình hiện tại (champion - mô hình A) và định tuyến một phần trăm lưu lượng* đến mô hình đối thủ (mô hình B). Dự đoán từ mô hình đối thủ được hiển thị cho người dùng. Sử dụng theo dõi và phân tích dự đoán trên cả hai mô hình để xác định xem hiệu suất của mô hình đối thủ có thống kê tốt hơn so với mô hình hiện tại không.
+
+•	Ưu điểm: Do các dự đoán được phục vụ cho người dùng, kỹ thuật này cho phép ta hoàn toàn hiểu cách người dùng phản ứng với các mô hình khác nhau. Kiểm thử A/B dễ hiểu và có rất nhiều thư viện và tài liệu liên quan. Giá của cách kiểm thử này rẻ để chạy vì chỉ có một dự đoán cho mỗi yêu cầu.
+
+•	Nhược điểm: Nó ít an toàn hơn so với phương pháp Shadow. Ta cần một đảm bảo đánh giá nhanh mô hình của mình vì ta sẽ đưa lưu lượng thực tế qua nó. Tính ý nghĩa thống kê là không chắc chắn.
+
+#### 2.2.2.2 Shadow Deployment
+
+•	Lý thuyết: Triển khai mô hình đối thủ (challenger) song song với mô hình hiện tại (champion). Mọi yêu cầu đến sẽ được gửi đến cả hai mô hình, nhưng chỉ kết quả dự đoán của mô hình hiện tại sẽ được phục vụ. Ghi lại các dự đoán từ cả hai mô hình để sau đó so sánh chúng.
+
+•	Ưu điểm: Đây là cách triển khai mô hình an toàn nhất. Ngay cả khi mô hình mới có lỗi, các dự đoán sẽ không được phục vụ. Nó có tính đơn giản về mặt khái niệm. Cuộc thử nghiệm của ta sẽ thu thập đủ dữ liệu để đạt được ý nghĩa thống kê nhanh hơn so với tất cả các chiến lược khác, vì tất cả các mô hình đều nhận toàn bộ lưu lượng.
+
+•	Nhược điểm: Kỹ thuật này không thể sử dụng khi đo lường hiệu suất của mô hình phụ thuộc vào việc quan sát cách người dùng tương tác với các dự đoán. Kỹ thuật này tốn kém vì nó làm tăng gấp đôi số lượng dự đoán và do đó làm tăng số lượng tính toán cần thiết.
+
+#### 2.2.2.3 Bandit
+
+•	Lý thuyết: Bandit là một thuật toán theo dõi hiệu suất hiện tại của từng biến thể mô hình và đưa ra quyết định động trên mỗi yêu cầu, xem liệu nên sử dụng mô hình hiện tại hoạt động tốt nhất (tức là khai thác kiến thức hiện tại) hay thử nghiệm mô hình khác để có thêm thông tin về chúng (tức là thăm dò nếu có một trong những mô hình khác tốt hơn).
+
+•	Ưu điểm: Bandit cần ít dữ liệu hơn so với kiểm thử A/B để xác định mô hình nào tốt hơn. Một ví dụ được đề cập trong sách nói về việc cần 630,000 mẫu để đạt được độ tin cậy 95% với kiểm thử A/B so với chỉ 12,000 mẫu với bandit. Bandit hiệu quả hơn về dữ liệu đồng thời giảm thiểu chi phí cơ hội. Trong nhiều trường hợp, bandit được xem xét là tối ưu. So với kiểm thử A/B, bandit an toàn hơn vì nếu một mô hình thực sự kém, thuật toán sẽ ít lựa chọn nó hơn. Hơn nữa, sự hội tụ sẽ nhanh chóng nên bạn có thể loại bỏ thách thức kém chất lượng một cách nhanh chóng.
+
+•	Nhược điểm: So với tất cả các chiến lược khác, bandit khó triển khai hơn đáng kể do cần liên tục truyền phản hồi vào thuật toán. Bandit chỉ có thể được sử dụng trong một số trường hợp cụ thể. Chúng không an toàn như Shadow vì các thách thức nhận lưu lượng trực tiếp từ người dùng.
 
